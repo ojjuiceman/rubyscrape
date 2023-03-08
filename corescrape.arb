@@ -1,20 +1,21 @@
 require 'open-uri'
 require 'net/http'
 require "nokogiri"
+require "csv"
 
 
 
 
-url = "https://en.wikipedia.org/wiki/Douglas_Adams"
-uri = URI.parse(url)
-
-response = Net::HTTP.get_response(uri)
-html = response.body
-
-
-
+html = URI.open("https://en.wikipedia.org/wiki/Douglas_Adams")
 doc = Nokogiri::HTML(html)
 
-vivi = doc.css("img").find{|picture| picture.attributes["alt"].value.include?("Douglas adams portrait cropped.jpg")}
+description = doc.css("p").text.split("\n").find{|e| e.length > 0}
+picture = doc.css("td a img").find{|picture| picture.attributes["alt"].value.include?("Douglas adams portrait cropped.jpg")}.attributes["src"].value
 
-puts vivi
+
+data_arr = []
+data_arr.push(description, picture)
+
+CSV.open('data.csv', "w") do |csv|
+    csv << data_arr
+end
