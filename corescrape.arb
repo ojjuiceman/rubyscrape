@@ -1,5 +1,9 @@
 require 'open-uri'
 require 'net/http'
+require "nokogiri"
+
+
+
 
 url = "https://en.wikipedia.org/wiki/Douglas_Adams"
 uri = URI.parse(url)
@@ -7,4 +11,6 @@ uri = URI.parse(url)
 response = Net::HTTP.get_response(uri)
 html = response.body
 
-put html
+puts html
+
+doc = Nokogiri::HTML(html)
