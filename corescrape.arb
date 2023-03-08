@@ -11,6 +11,10 @@ uri = URI.parse(url)
 response = Net::HTTP.get_response(uri)
 html = response.body
 
-puts html
+
 
 doc = Nokogiri::HTML(html)
+
+vivi = doc.css("img").find{|picture| picture.attributes["alt"].value.include?("Douglas adams portrait cropped.jpg")}
+
+puts vivi
